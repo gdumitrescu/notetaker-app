@@ -1,0 +1,7 @@
+{
+  "fileExtensions": [".js", ".jsx"],
+  "preset": "google",
+  "requireMultipleVarDecl": null,
+  "requireCamelCaseOrUpperCaseIdentifiers": null,
+  "excludeFiles": ["node_modules/**/*"]
+}
