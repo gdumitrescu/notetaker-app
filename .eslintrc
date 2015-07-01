@@ -1,0 +1,41 @@
+rules:
+  indent:
+    - 2
+    - 2
+  linebreak-style:
+    - 2
+    - unix
+  no-alert:
+    - 2
+  no-console:
+    - 2
+  no-debugger:
+    - 2
+  quotes:
+    - 2
+    - single
+  semi:
+    - 2
+    - always
+  strict:
+    - 2
+env:
+  es6: true
+  node: true
+  browser: true
+ecmaFeatures:
+  jsx: true
+  module: true
+  templateStrings: true
+plugins:
+  - react
+globals:
+  "afterEach": true
+  "beforeEach": true
+  "describe": true
+  "expect": true
+  "it": true
+  "document": true
+  "require": true
+  "module": true
+  "Firebase": true
