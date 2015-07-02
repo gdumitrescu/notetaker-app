@@ -25,7 +25,7 @@ env:
   browser: true
 ecmaFeatures:
   jsx: true
-  module: true
+  modules: true
   templateStrings: true
 plugins:
   - react
@@ -34,6 +34,7 @@ globals:
   "beforeEach": true
   "describe": true
   "expect": true
+  "import": true
   "it": true
   "document": true
   "require": true

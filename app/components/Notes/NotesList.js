@@ -1,24 +1,38 @@
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var NotesList = React.createClass({
+class NotesList extends React.Component{
 
-  render: function() {
-    var notes = this.props.notes.map(function(note, index) {
-      return (
-        <li className="list-group-item" key={index}>
-          {note}
+  render() {
+    var notesList;
+    var notes = this.props.notes;
+    if (notes && notes.length > 0) {
+      notesList = notes.reverse().map((note, index) => {
+        return (
+          <li className="list-group-item" key={index}>
+            {note}
+          </li>
+        );
+      });
+    } else {
+      notesList = (
+        <li className="list-group-item">
+          No notes found for {this.props.username}.
         </li>
       );
-    });
+    }
     return (
       <ul className="list-group">
-        {notes}
+        {notesList}
       </ul>
     );
   }
+}
 
-});
+NotesList.propTypes = {
+  username: React.PropTypes.string.isRequired,
+  notes: React.PropTypes.array.isRequired
+};
 
-module.exports = NotesList;
+export default NotesList;

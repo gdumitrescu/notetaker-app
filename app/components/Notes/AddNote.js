@@ -1,19 +1,16 @@
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var AddNote = React.createClass({
-  propType: {
-    username: React.PropTypes.string.isRequired,
-    addNote: React.PropTypes.func.isRequired
-  },
-  handleSubmit: function() {
+class AddNote extends React.Component{
+
+  handleSubmit() {
     var noteInput = this.refs.note.getDOMNode();
     var newNote = noteInput.value;
     noteInput.value = '';
     this.props.addNote(newNote);
-  },
-  render: function() {
+  }
+  render() {
     return (
       <div className="input-group">
         <input type="text"
@@ -22,11 +19,16 @@ var AddNote = React.createClass({
         <span className="input-group-btn">
           <button className="btn btn-default"
             type="button"
-            onClick={this.handleSubmit}>Submit</button>
+            onClick={this.handleSubmit.bind(this)}>Submit</button>
         </span>
       </div>
     );
   }
-});
+}
 
-module.exports = AddNote;
+AddNote.propTypes = {
+  username: React.PropTypes.string.isRequired,
+  addNote: React.PropTypes.func.isRequired
+};
+
+export default AddNote;

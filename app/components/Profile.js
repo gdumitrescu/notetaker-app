@@ -1,65 +1,71 @@
 'use strict';
 
-var React = require('react');
-var Router = require('react-router');
-var Firebase = require('firebase');
-var ReactFireMixin = require('reactfire');
+import React from 'react';
 
-var helpers = require('../utils/helpers');
+import helpers from '../utils/helpers';
 
-var UserProfile = require('./Github/UserProfile');
-var Repos = require('./Github/Repos');
-var Notes = require('./Notes/Notes');
+import UserProfile from './Github/UserProfile';
+import Repos from './Github/Repos';
+import Notes from './Notes/Notes';
 
-var Profile = React.createClass({
-  mixins: [
-    Router.State,
-    ReactFireMixin
-  ],
-  init: function() {
-    // get username from parameters
-    var username = this.getParams().username;
+import Rebase from 're-base';
 
-    // use username with Firebase
-    var childRef = this.ref.child(username);
-    this.bindAsArray(childRef, 'notes');
+var FB_URL = 'https://contents.firebaseio.com/notetaker/';
+var base = Rebase.createClass(FB_URL);
 
-    // fetch Github data
-    helpers
-      .getGithubInfo(username)
-      .then(function(data) {
-        this.setState({
-          bio: data.bio,
-          repos: data.repos
-        });
-      }.bind(this));
-  },
-  getInitialState: function() {
-    return {
+class Profile extends React.Component{
+
+  constructor(props) {
+    super(props);
+    this.state = {
       notes: [],
       bio: {},
       repos: []
     };
-  },
-  componentDidMount: function() {
-    var FB_URL = 'https://contents.firebaseio.com/notetaker';
-    this.ref = new Firebase(FB_URL);
+  }
+  init() {
+    // get username from parameters
+    var username = this.router.getCurrentParams().username;
+
+    // use username with re-base
+    this.ref = base.bindToState(username, {
+      context: this,
+      asArray: true,
+      state: 'notes'
+    });
+
+    // fetch Github data
+    helpers
+      .getGithubInfo(username)
+      .then((data) => {
+        this.setState({
+          bio: data.bio,
+          repos: data.repos
+        });
+      });
+  }
+  componentWillMount() {
+    this.router = this.context.router;
+  }
+  componentDidMount() {
     this.init();
-  },
-  componentWillUnmount: function() {
-    this.unbind('notes');
-  },
-  componentWillReceiveProps: function() {
-    this.unbind('notes');
+  }
+  componentWillUnmount() {
+    base.removeBinding(this.ref);
+  }
+  componentWillReceiveProps() {
+    base.removeBinding(this.ref);
     this.init();
-  },
-  handleAddNote: function(newNote) {
-    var username = this.getParams().username;
+  }
+  handleAddNote(newNote) {
+    var username = this.router.getCurrentParams().username;
     var notes = this.state.notes;
-    this.ref.child(username).set(notes.concat([newNote]));
-  },
-  render: function() {
-    var username = this.getParams().username;
+    base.post(username, {
+      data: notes.concat([newNote])
+    });
+  }
+  render() {
+    var username = this.router.getCurrentParams().username;
     return (
       <div className="row">
         <div className="col-md-4">
@@ -72,12 +78,15 @@ var Profile = React.createClass({
           <Notes
               username={username}
               notes={this.state.notes}
-              addNote={this.handleAddNote} />
+              addNote={this.handleAddNote.bind(this)} />
         </div>
       </div>
     );
   }
+}
 
-});
+Profile.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 module.exports = Profile;
