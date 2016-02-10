@@ -1,5 +1,6 @@
 ## React Notetaker App by egghead.io
-
+[![Dependency Status](https://david-dm.org/gdumitrescu/notetaker-app.svg)](https://david-dm.org/gdumitrescu/notetaker-app)
+[![devDependency Status](https://david-dm.org/gdumitrescu/notetaker-app/dev-status.svg)](https://david-dm.org/gdumitrescu/notetaker-app#info=devDependencies)
 ### Steps:
 01. Notetaker Introduction
 02. Up and Running with React and Webpack
